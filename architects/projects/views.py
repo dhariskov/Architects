@@ -1,10 +1,11 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.views.generic import DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView
 from django.views.generic.base import View, TemplateView
 
-from projects.models import Project
+from projects.models import Project, ProjectDetail
 
 
 class IndexView(TemplateView):
@@ -27,3 +28,13 @@ class ProjectsListView(ListView):
 class ProjectDetailsView(DetailView):
     model = Project
     template_name = 'details.html'
+
+
+class ProjectCreateView(CreateView):
+    fields = '__all__'
+    model = Project
+    template_name = 'create.html'
+    success_url = reverse_lazy('add details')
+
+
+# class AddDetailsView

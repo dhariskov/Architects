@@ -7,3 +7,7 @@ class Project(models.Model):
     image = models.ImageField()
     description = models.TextField()
 
+class ProjectDetail(models.Model):
+    title = models.ForeignKey(Project, on_delete=models.CASCADE)
+    image = models.ImageField()
+    description = models.TextField()
