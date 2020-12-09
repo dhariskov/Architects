@@ -20,7 +20,9 @@ class MoreProjectDetails(models.Model):
     image = models.ImageField()
     description = models.TextField()
 
-    # def get_absolute_url(self):
-    #     return reverse('index')
+
+class Comment(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    comment = models.TextField()
 
 
