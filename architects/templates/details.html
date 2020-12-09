@@ -2,11 +2,13 @@
 {% block site_content %}
 
 
-    <h1>Recipe Details</h1>
+    <h1>Project Overview</h1>
     <div class="items-container">
         <div class="item">
             {% include 'shared/image_detail.html' %}
-            {% include 'shared/details_button.html' %}
+            <div class="buttons-container">
+                <a class="button detail" href="{% url 'all_project_details' project.id %}">Details</a>
+            </div>
             {% include 'shared/edit_del_buttons.html' %}
         </div>
     </div>

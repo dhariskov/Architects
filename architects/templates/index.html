@@ -10,18 +10,6 @@
 
             <div class="item">
                 {% include 'shared/image_detail.html' %}
-                {#                <h2>Type: {{ project.type }}</h2>#}
-                {#                <h2>{{ project.title }}</h2>#}
-                {##}
-                {#                <img class="detail-img" src="{{ project.image.url }}" alt="building-image">#}
-                {#                <div class="building-info">#}
-                {#                    {{ project.description }}#}
-                {#                </div>#}
-                {#                <div class="buttons-container">#}
-                {#                    <a class="button detail" href="{% url 'details' project.id %}">Details</a>#}
-                {#                    <a class="button edit" href="#">Edit</a>#}
-                {#                    <a class="button delete" href="{% url 'delete' recipe.id %}">Delete</a>#}
-                {#                </div>#}
                 {% include 'shared/details_button.html' %}
                 {% include 'shared/edit_del_buttons.html' %}
 
@@ -34,11 +22,9 @@
             <a class="button edit" href="?page={{ page_obj.next_page_number }}">Next</a>
         </div>
     {% endif %}
-    {% if page_obj.has_next %}
-        <div class="buttons-container">
-            <a class="button edit" disabled="disabled">{{ page_obj.number }}</a>
-        </div>
-    {% endif %}
+    <div class="buttons-container">
+        <a class="button edit" disabled="disabled">{{ page_obj.number }}</a>
+    </div>
     {% if page_obj.has_previous %}
         <div class="buttons-container">
             <a class="button edit" href="?page={{ page_obj.previous_page_number }}">Prev</a>

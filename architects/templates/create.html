@@ -3,10 +3,12 @@
     <h1>Create Project</h1>
     <div class="items-container">
         <div class="item">
-            <form method="POST" action="{% url 'create' %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'create'%}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form }}
-                <input type="submit" value="Create">
+                After you create your project you will be redirected to a page where you can add more details
+                <input type="submit" value="Create" >
+{#                href="{% url 'more_details' project.id %}#}
             </form>
         </div>
     </div>
