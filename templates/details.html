@@ -1,0 +1,38 @@
+{% extends 'shared/site.html' %}
+{% block site_content %}
+    <h1>Project Overview</h1>
+    <div class="items-container">
+        <div class="item">
+            {% include 'shared/image_detail.html' %}
+            <div class="buttons-container">
+                <a class="button detail" href="{% url 'all_project_details' pk %}">Details</a>
+            </div>
+            {% include 'shared/edit_del_buttons.html' %}
+        </div>
+    </div>
+
+
+    <div class="items-container">
+        <div class="item">
+            {% if project.comment_set.count > 0 %}
+                {% for c in project.comment_set.all %}
+                    <div class="box">
+                        <h5><em>{{ c.comment }}</em></h5>
+                        <hr>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="box">
+                    <h3>There are no comments for this project </h3>
+                </div>
+            {% endif %}
+            <div class="box">
+                <form method="post" action="{% url 'details' pk %}">
+                    {% csrf_token %}
+                    {{ comment }}
+                    <input type="submit" value="Add Comment">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
