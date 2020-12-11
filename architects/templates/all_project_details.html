@@ -25,13 +25,16 @@
                     <img class="detail-img" src="{{ details.image.url }}" alt="building-image">
 
                     ___________________________________________________
-                    <div class="buttons-container">
-                        <a class="button edit" href="{% url 'update_moredetails' details.id %}">Edit</a>
-                        <a class="button delete" href="{% url 'delete_project_details' details.id %}">Delete</a>
-                    </div>
-                    <div class="buttons-container">
-                        <a class="button edit" href="{% url 'details' pk %}">Main project</a>
-                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="buttons-container">
+                            <a class="button edit" href="{% url 'update_moredetails' details.id %}">Edit</a>
+                            <a class="button delete" href="{% url 'delete_project_details' details.id %}">Delete</a>
+                        </div>
+                    {% endif %}
+                        <div class="buttons-container">
+                            <a class="button edit" href="{% url 'details' pk %}">Main project</a>
+                        </div>
+
 
                     <div class="buttons-container">
                         <a class="button detail" href="{% url 'full_screen' details.id %}">Full size</a>

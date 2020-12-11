@@ -1,4 +1,6 @@
-<div class="buttons-container">
-    <a class="button edit" href="{% url 'update_project' project.id%}">Edit</a>
-    <a class="button delete" href="{% url 'delete' project.id%}">Delete</a>
-</div>
+{% if user.is_authenticated %}
+    <div class="buttons-container">
+        <a class="button edit" href="{% url 'update_project' project.id%}">Edit</a>
+        <a class="button delete" href="{% url 'delete' project.id%}">Delete</a>
+    </div>
+{% endif %}

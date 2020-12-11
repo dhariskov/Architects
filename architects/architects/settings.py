@@ -14,6 +14,8 @@ from pathlib import Path
 from os.path import join
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'projects',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +79,7 @@ WSGI_APPLICATION = 'architects.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'architects',
+        'NAME': 'achitects1',
         'USER': 'postgres',
         'PASSWORD': 'qS5f9v48%',
         'HOST': '127.0.0.1',
@@ -125,4 +128,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = join(BASE_DIR, 'media')
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
 

@@ -1,0 +1,9 @@
+{% extends 'shared/site.html' %}
+{% block site_content %}
+
+    <form action="{% url 'register'%}" method="post">
+        {{ form }}
+        {% csrf_token %}
+        <input type="submit" class="button edit" value="Register">
+    </form>
+{% endblock %}
