@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
+# from django.urls import reverse_lazy
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import TemplateView
+from django import views
 
 from projects.forms import MoreProjectDetailsForm, CommentForm
 from projects.models import Project, MoreProjectDetails, Comment
@@ -65,7 +67,6 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
-        data = Project.objects.all()
         return {
             'projects': Project.objects.all()
         }
@@ -88,17 +89,6 @@ class ProjectsListView(ListView):
     paginate_by = '10'
 
 
-# class MoreProjectDetailsView(ListView):
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context={
-#             'project_id': self.kwargs['pk']
-#         }
-#         return context
-#     template_name = 'all_project_details.html'
-#     model = MoreProjectDetails.objects.filter(project_id=context['project_id'])
-#     context_object_name = 'more_details'
-#     # paginate_by = '10'
-
 class MoreProjectDetailsView(TemplateView):
     template_name = 'all_project_details.html'
 
@@ -111,57 +101,40 @@ class MoreProjectDetailsView(TemplateView):
             'more_details': data
         }
 
-
-# class ProjectDetailsView(TemplateView):
-#     template_name = 'details.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['comment'] = CommentForm
-#         context['project'] = Project.objects.get(pk=self.kwargs['pk'])
-#         context['pk'] = self.kwargs['pk']
-#         return context
-
-class ProjectDetailsView(CreateView):
-    template_name = 'details.html'
-    model = Comment
-    form_class = CommentForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                details = Comment(comment=form.cleaned_data['comment'])
-                details.project = Project.objects.get(pk=self.kwargs['pk'])
-                details.save()
-            return redirect('details', self.kwargs['pk'])
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = {
-            'project': Project.objects.get(pk=self.kwargs['pk']),
-            'pk': self.kwargs['pk'],
-            'comment': CommentForm(),
-        }
-        return context
+# class MoreProjectDetailsView(ListView):
+#     template_name = 'all_project_details.html'
+#     model = MoreProjectDetails
+#     context_object_name = 'more_details'
+#     paginate_by = '10'
 
 
 class ProjectCreateView(CreateView):
     fields = '__all__'
     model = Project
     template_name = 'create.html'
-    # success_url = reverse_lazy(f'index')
 
 
-# class MoreProjectDetailsView(CreateView):
-#     def get_context_data(self, **kwargs):
-#         context ={
-#             'pk': self.kwargs['pk'],
-#             'form': MoreProjectDetailsForm()
-#         }
-#         return context
-#     fields = ['image', 'description']
-#     model = MoreProjectDetails
-#     template_name = 'more_details.html'
-#     success_url = reverse_lazy('index')
+class EditView(views.generic.UpdateView):
+    fields = '__all__'
+    model = Project
+    template_name = 'edit.html'
+    # success_url = reverse_lazy('index')
+
+class EditMoreProjectDetailsView(views.generic.UpdateView):
+    fields = ['image', 'description']
+    model = MoreProjectDetails
+    template_name = 'edit_more_project_details.html'
+    success_url = reverse_lazy('index')
+
+
+class DeleteView(views.generic.DeleteView):
+    model = Project
+    template_name = 'delete.html'
+    success_url = reverse_lazy('index')
+
+
+class DeleteProjectDetailsView(views.generic.DeleteView):
+    model = MoreProjectDetails
+    template_name = 'delete_project_details.html'
+    success_url = reverse_lazy('index')
 

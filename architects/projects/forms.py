@@ -10,9 +10,9 @@ class ProjectCreateForm(forms.ModelForm):
 
 
 class MoreProjectDetailsForm(forms.Form):
-    image = forms.ImageField(required=False, widget=forms.FileInput)
-    description = forms.CharField(required=False, widget=forms.Textarea)
+    image = forms.ImageField(widget=forms.FileInput)
+    description = forms.CharField(widget=forms.Textarea)
 
 
 class CommentForm(forms.Form):
-    comment = forms.CharField(required=False, widget=forms.Textarea)
+    comment = forms.CharField(widget=forms.Textarea)

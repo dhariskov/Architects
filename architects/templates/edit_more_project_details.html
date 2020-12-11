@@ -3,11 +3,10 @@
 
 
 
-    <h1>Edit Project</h1>
+    <h1>Edit Project Detail</h1>
     <div class="items-container">
         <div class="item">
-            <form method="POST">
-                {{ form.errors }}
+            <form method="POST" >
                 {{ form }}
                 {% csrf_token %}
                 <input type="submit" class="button edit" value="Edit">

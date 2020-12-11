@@ -5,25 +5,43 @@
     <h1>Details for {{ project_name }} projects</h1>
     {% if not more_details %}
         <h2>This project has no details</h2>
+        <div class="items-container">
+
+            <div class="buttons-container">
+                <a class="button edit" href="{% url 'details' pk %}">Main project</a>
+            </div>
+
+        </div>
     {% else %}
         <div class="items-container">
             <div class="item">
                 {% for details in more_details %}
-                    <h2>{{ details.project.title }}</h2>
 
-                    <img class="detail-img" src="{{ details.image.url }}" alt="building-image">
+                    {#                    <h2>{{ details.project.title }}</h2>#}
                     <div class="building-info">
                         {{ details.description }}
+                    </div>
 
+                    <img class="detail-img" src="{{ details.image.url }}" alt="building-image">
+
+                    ___________________________________________________
+                    <div class="buttons-container">
+                        <a class="button edit" href="{% url 'update_moredetails' details.id %}">Edit</a>
+                        <a class="button delete" href="{% url 'delete_project_details' details.id %}">Delete</a>
                     </div>
                     <div class="buttons-container">
-                        <a class="button detail" href="{% url 'full_screen' details.id %}">See in full size</a>
+                        <a class="button edit" href="{% url 'details' pk %}">Main project</a>
                     </div>
+
+                    <div class="buttons-container">
+                        <a class="button detail" href="{% url 'full_screen' details.id %}">Full size</a>
+                    </div>
+                    ___________________________________________________
+
                 {% endfor %}
+
             </div>
-            <div class="buttons-container">
-                <a class="button edit" href="{% url 'details' pk %}">Main project</a>
-            </div>
+
         </div>
     {% endif %}
 
