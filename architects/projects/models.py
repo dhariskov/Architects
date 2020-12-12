@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 from django.urls import reverse
 
-from authentication.models import Profile
+from authentication.models import Profile, UserModel
 
 
 class Project(models.Model):
@@ -12,7 +12,7 @@ class Project(models.Model):
     type = models.CharField(max_length=30)
     image = models.ImageField()
     description = models.TextField()
-    # user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('add_more_details', kwargs={'pk': self.pk})

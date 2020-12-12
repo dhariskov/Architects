@@ -6,3 +6,5 @@
     <div class="building-info">
         {{ project.description }}
     </div>
+{#    <h3>Architect {{ project.user.last_name }}</h3>#}
+    <h3><a class="button detail" href="{% url 'about' project.user.id%}">Architect {{ project.user.last_name }}</a></h3>

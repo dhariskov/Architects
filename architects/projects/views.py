@@ -7,6 +7,7 @@ from django.views.generic import DetailView, ListView, CreateView
 from django.views.generic.base import TemplateView
 from django import views
 
+from authentication.models import Profile
 from projects.forms import MoreProjectDetailsForm, CommentForm
 from projects.models import Project, MoreProjectDetails, Comment
 
@@ -14,17 +15,14 @@ from projects.models import Project, MoreProjectDetails, Comment
 class ProjectDetailsView(CreateView):
     template_name = 'details.html'
     model = Comment
-    form_class = CommentForm
+    fields = ['comment', ]
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                details = Comment(comment=form.cleaned_data['comment'])
-                details.project = Project.objects.get(pk=self.kwargs['pk'])
-                details.save()
-            return redirect('details', self.kwargs['pk'])
-        return super().dispatch(request, *args, **kwargs)
+    def get_success_url(self):
+        return reverse_lazy('details', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+        form.instance.project = Project.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = {
@@ -63,15 +61,6 @@ def ProjectCreateFormView(request, pk):
         return render(request, 'add_more_details.html', context=context)
 
 
-class IndexView(TemplateView):
-    template_name = 'index.html'
-
-    def get_context_data(self, **kwargs):
-        return {
-            'projects': Project.objects.all()
-        }
-
-
 class FullScreenView(TemplateView):
     template_name = 'full_screen.htm'
 
@@ -88,6 +77,16 @@ class ProjectsListView(ListView):
     context_object_name = 'projects'
     paginate_by = '10'
 
+class MyProjectsListView(ListView):
+    template_name = 'index.html'
+    model = Project
+
+    def get_context_data(self, *args, **kwargs):
+        pk = self.kwargs['pk']
+        context = {
+            'projects': Project.objects.filter(user_id=pk),
+        }
+        return context
 
 class MoreProjectDetailsView(TemplateView):
     template_name = 'all_project_details.html'
@@ -101,30 +100,51 @@ class MoreProjectDetailsView(TemplateView):
             'more_details': data
         }
 
-# class MoreProjectDetailsView(ListView):
-#     template_name = 'all_project_details.html'
-#     model = MoreProjectDetails
-#     context_object_name = 'more_details'
-#     paginate_by = '10'
-
 
 class ProjectCreateView(CreateView):
-    fields = '__all__'
+    fields = ['title', 'type', 'image', 'description']
     model = Project
     template_name = 'create.html'
 
+    def get_success_url(self):
+        pk = Project.objects.all().last().id
+        return reverse_lazy('add_more_details', kwargs={'pk': pk})
+
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+# def get_context_data(self, **kwargs):
+#     context = {
+#         # 'project': Project.objects.get(pk=self.kwargs['pk']),
+#         # 'pk': self.kwargs['pk'],
+#         # 'comment': CommentForm(),
+#     }
+#     return context
+
 
 class EditView(views.generic.UpdateView):
-    fields = '__all__'
+    fields = ['title', 'type', 'image', 'description']
     model = Project
     template_name = 'edit.html'
-    # success_url = reverse_lazy('index')
+
+    def get_success_url(self):
+        pk = Project.objects.all().last().id
+        return reverse_lazy('details', kwargs={'pk': pk})
+
 
 class EditMoreProjectDetailsView(views.generic.UpdateView):
     fields = ['image', 'description']
     model = MoreProjectDetails
     template_name = 'edit_more_project_details.html'
-    success_url = reverse_lazy('index')
+
+    # success_url = reverse_lazy('index')
+
+    def get_success_url(self):
+        pk = MoreProjectDetails.objects.filter(id=self.kwargs['pk']).last().project_id
+        return reverse_lazy('all_project_details', kwargs={'pk': pk})
 
 
 class DeleteView(views.generic.DeleteView):
@@ -138,3 +158,18 @@ class DeleteProjectDetailsView(views.generic.DeleteView):
     template_name = 'delete_project_details.html'
     success_url = reverse_lazy('index')
 
+    def get_success_url(self):
+        pk = MoreProjectDetails.objects.get(id=self.kwargs['pk']).project_id
+        return reverse_lazy('all_project_details', kwargs={'pk': pk})
+
+
+class AboutView(TemplateView):
+    template_name = 'about.html'
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        return {
+            'data': Profile.objects.get(pk=pk)
+        }
+
+    # def dispatch(self, request, *args, **kwargs):

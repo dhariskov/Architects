@@ -20,3 +20,5 @@ class LogInView(auth_views.LoginView):
 
 class LogOutView(auth_views.LogoutView):
     next_page = reverse_lazy('index')
+
+

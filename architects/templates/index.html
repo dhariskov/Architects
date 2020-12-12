@@ -1,7 +1,8 @@
 {% extends 'shared/site.html' %}
 {% block site_content %}
 
-    <h1>Architect {{ user.last_name }}'s projects</h1>
+{#    <h1>Architect {{ user.last_name }}'s projects</h1>#}
+    <h1>All Projects</h1>
     {% if not projects %}
         <h2>This architect has no projects</h2>
     {% else %}
@@ -11,7 +12,7 @@
             <div class="item">
                 {% include 'shared/image_detail.html' %}
                 {% include 'shared/details_button.html' %}
-                {% include 'shared/edit_del_buttons.html' %}
+{#                {% include 'shared/edit_del_buttons.html' %}#}
 
             </div>
         {% endfor %}

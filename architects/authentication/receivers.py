@@ -10,5 +10,5 @@ UserModel = get_user_model()
 @receiver(post_save, sender=UserModel)
 def user_created(sender, instance, created, *args, **kwargs):
     if created:
-        profile = Profile(user=instance, display_name=instance.username, first_name=instance.first_name, last_name=instance.last_name)
+        profile = Profile(user=instance, display_name=instance.username, first_name=instance.first_name, last_name=instance.last_name, email=instance.email)
         profile.save()

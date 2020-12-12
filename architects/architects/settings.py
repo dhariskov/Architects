@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'architects.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'achitects1',
+        'NAME': 'architects101',
         'USER': 'postgres',
         'PASSWORD': 'qS5f9v48%',
         'HOST': '127.0.0.1',

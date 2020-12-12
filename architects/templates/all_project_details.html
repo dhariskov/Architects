@@ -5,13 +5,16 @@
     <h1>Details for {{ project_name }} projects</h1>
     {% if not more_details %}
         <h2>This project has no details</h2>
-        <div class="items-container">
+{#        <div class="items-container">#}
 
-            <div class="buttons-container">
-                <a class="button edit" href="{% url 'details' pk %}">Main project</a>
-            </div>
+{#            <div class="buttons-container">#}
+                {#                <a class="button edit" href="{% url 'details' pk %}">Main project</a>#}
+                {#                {% if user.is_authenticated %}#}
+                {#                    <a class="button edit" href="{% url 'add_more_details' pk %}">Add More Details</a>#}
+                {#                {% endif %}#}
+{#            </div>#}
 
-        </div>
+{#        </div>#}
     {% else %}
         <div class="items-container">
             <div class="item">
@@ -29,11 +32,12 @@
                         <div class="buttons-container">
                             <a class="button edit" href="{% url 'update_moredetails' details.id %}">Edit</a>
                             <a class="button delete" href="{% url 'delete_project_details' details.id %}">Delete</a>
+
                         </div>
                     {% endif %}
-                        <div class="buttons-container">
-                            <a class="button edit" href="{% url 'details' pk %}">Main project</a>
-                        </div>
+                    {#                    <div class="buttons-container">#}
+                    {#                        <a class="button edit" href="{% url 'details' pk %}">Main project</a>#}
+                    {#                    </div>#}
 
 
                     <div class="buttons-container">
@@ -47,7 +51,10 @@
 
         </div>
     {% endif %}
-
+    <div class="buttons-container">
+        <a class="button edit" href="{% url 'details' pk %}">Main project</a>
+        <a class="button edit" href="{% url 'add_more_details' pk %}">Add More Details</a>
+    </div>
 
 
 

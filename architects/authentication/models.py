@@ -8,5 +8,6 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
 

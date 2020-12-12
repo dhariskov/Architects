@@ -1,0 +1,13 @@
+{% extends 'shared/site.html' %}
+{% block site_content %}
+    <div class="items-container">
+        <div class="item">
+            Architect
+            {{ data.first_name }}
+            {{ data.last_name }}
+            email:
+            {{ data.email }}
+        </div>
+    </div>
+
+{% endblock %}
