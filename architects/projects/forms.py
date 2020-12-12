@@ -16,3 +16,22 @@ class MoreProjectDetailsForm(forms.Form):
 
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
+
+
+class FilterForm(forms.Form):
+    SEARCH_BY_TITLE = 'title'
+    SEARCH_BY_TYPE = 'type'
+
+    ORDER_CHOICES = (
+        (SEARCH_BY_TITLE, 'Project title'),
+        (SEARCH_BY_TYPE, 'Project type'),
+    )
+
+
+    text = forms.CharField(
+        required=False,
+    )
+    order = forms.ChoiceField(
+        choices=ORDER_CHOICES,
+        required=False,
+    )

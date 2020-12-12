@@ -28,7 +28,7 @@
                     <img class="detail-img" src="{{ details.image.url }}" alt="building-image">
 
                     ___________________________________________________
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and project_user == user%}
                         <div class="buttons-container">
                             <a class="button edit" href="{% url 'update_moredetails' details.id %}">Edit</a>
                             <a class="button delete" href="{% url 'delete_project_details' details.id %}">Delete</a>
@@ -53,7 +53,9 @@
     {% endif %}
     <div class="buttons-container">
         <a class="button edit" href="{% url 'details' pk %}">Main project</a>
-        <a class="button edit" href="{% url 'add_more_details' pk %}">Add More Details</a>
+        {% if user.is_authenticated and project_user == user%}
+            <a class="button edit" href="{% url 'add_more_details' pk %}">Add More Details</a>
+        {% endif %}
     </div>
 
 

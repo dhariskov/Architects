@@ -7,8 +7,8 @@ from django.views.generic import DetailView, ListView, CreateView
 from django.views.generic.base import TemplateView
 from django import views
 
-from authentication.models import Profile
-from projects.forms import MoreProjectDetailsForm, CommentForm
+from authentication.models import Profile, UserModel
+from projects.forms import MoreProjectDetailsForm, CommentForm, FilterForm
 from projects.models import Project, MoreProjectDetails, Comment
 
 
@@ -69,13 +69,69 @@ class FullScreenView(TemplateView):
         return {
             'data': MoreProjectDetails.objects.get(pk=pk)
         }
-
-
 class ProjectsListView(ListView):
     template_name = 'index.html'
     model = Project
     context_object_name = 'projects'
-    paginate_by = '10'
+    # order_by_asc = True
+    order_by = ''
+    contains_text = ''
+
+    def dispatch(self, request, *args, **kwargs):
+        params = extract_filter_values(request.GET)
+        # self.order_by_asc = params['order'] == FilterForm.ORDER_ASC
+        self.order_by = params['order']
+        self.contains_text = params['text']
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        order_by = self.order_by
+        if order_by == 'title':
+            result = self.model.objects.filter(title__icontains=self.contains_text).order_by(order_by)
+        else:
+            result = self.model.objects.filter(type__icontains=self.contains_text).order_by(order_by)
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = FilterForm(initial={
+            # 'order': self.order_by,
+            'text': self.contains_text
+        })
+
+        return context
+
+# class ProjectsListView(ListView):
+#     template_name = 'index.html'
+#     model = Project
+#     context_object_name = 'projects'
+#     paginate_by = '10'
+#     order_by_asc = True
+#     search_by = 'title'
+#     contains_text = ''
+#
+#     def dispatch(self, request, *args, **kwargs):
+#         params = extract_filter_values(request.GET)
+#         self.order_by_asc = params['search_by'] == FilterForm.SEARCH_BY_TITLE
+#         self.order_by = params['search_by']
+#         self.contains_text = params['text']
+#         return super().dispatch(request, *args, **kwargs)
+#
+#     def get_queryset(self):
+#         search_by = 'title' if self.search_by == FilterForm.SEARCH_BY_TITLE else '-title'
+#         result = self.model.objects.filter(title__icontains=self.contains_text).search_by(search_by)
+#
+#         return result
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['filter_form'] = FilterForm(initial={
+#             'search_by': self.search_by,
+#             'text': self.contains_text
+#         })
+#
+#         return context
+
 
 class MyProjectsListView(ListView):
     template_name = 'index.html'
@@ -96,6 +152,7 @@ class MoreProjectDetailsView(TemplateView):
         data = MoreProjectDetails.objects.filter(project_id=pk)
         return {
             'project_name': Project.objects.get(pk=pk).title,
+            'project_user': Project.objects.get(pk=pk).user,
             'pk': pk,
             'more_details': data
         }
@@ -173,3 +230,20 @@ class AboutView(TemplateView):
         }
 
     # def dispatch(self, request, *args, **kwargs):
+# def extract_filter_values(params):
+#     search_by = params['search_by'] if 'search_by' in params else FilterForm.SEARCH_BY_TITLE
+#     text = params['text'] if 'text' in params else ''
+#
+#     return {
+#         'search_by': search_by,
+#         'text': text,
+#     }
+
+def extract_filter_values(params):
+    order = params['order'] if 'order' in params else FilterForm.SEARCH_BY_TITLE
+    text = params['text'] if 'text' in params else ''
+
+    return {
+        'order': order,
+        'text': text,
+    }
