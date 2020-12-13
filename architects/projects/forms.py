@@ -1,6 +1,6 @@
 from django import forms
 
-from projects.models import Project, MoreProjectDetails, Comment
+from projects.models import Project
 
 
 class ProjectCreateForm(forms.ModelForm):

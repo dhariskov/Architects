@@ -1,7 +1,6 @@
 from django.urls import reverse_lazy
 from django.views import generic as views
 from django.contrib.auth import views as auth_views
-from django.contrib.auth import forms as auth_forms
 
 
 # Create your views here.
